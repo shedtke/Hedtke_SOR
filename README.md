@@ -1,18 +1,19 @@
 # Hedtke_SOR
  Repository currently under revision.
- Scripts used to assess Onchocerca volvulus sequence data for sub-optimal response to ivermectin.
+ Scripts used to assess <i>Onchocerca volvulus sequence data<\i> for sub-optimal response to ivermectin.
+ Note that commands are dependent on the program version.
  
  
  (1) Bash scripts that can be used for data analysis on a computational cluster.
- Note that commands are dependent on the program version.
-	gha.trim.map.vc.qs : pipeline used on whole-genome sequences of worms from Ghana
-	cam.trim.map.vc.qs : pipeline used on reduced representation sequences of worms from Cameroon
+ 	gha.trim.map.vc.qs : pipeline used on whole-genome sequences of worms from Ghana
+  	cam.trim.map.vc.qs : pipeline used on reduced representation sequences of worms from Cameroon
  
  (2) Perl scripts
  These are written to assess various outputs.
-	assess_target_depths.pl
-	assess_nearness_of_fst_above_5SD.pl
-	calc_cov_per_chrom_Ov.pl
+	
+ 	assess_target_depths.pl
+  	assess_nearness_of_fst_above_5SD.pl
+   	calc_cov_per_chrom_Ov.pl
 
 (3) Multi-sample variant calling 
 Bash script for using GATK and freebayes to call variants, and then taking the intersection of the two callers.
