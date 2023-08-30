@@ -1,6 +1,6 @@
 # Hedtke_SOR
  Repository currently under revision.
- Scripts used to assess <i>Onchocerca volvulus sequence data<i> for sub-optimal response to ivermectin.
+ Scripts used to assess <i>Onchocerca volvulus</i> sequence data for sub-optimal response to ivermectin.
  Note that commands are dependent on the program version.
  
  
@@ -10,7 +10,6 @@
  
  (2) Perl scripts
  These are written to assess various outputs.
-	
  	assess_target_depths.pl
   	assess_nearness_of_fst_above_5SD.pl
    	calc_cov_per_chrom_Ov.pl
