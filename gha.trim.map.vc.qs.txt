@@ -33,7 +33,7 @@ echo "trimming $i"
 trimmomatic PE -threads 2 -phred33 -trimlog $i\.trim.log $i\_R1.fastq $i\_R2.fastq -baseout $i\.trimmed.fq ILLUMINACLIP:NexteraPE-PE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:75
 
 echo "mapping $i to $REF"
-bwa mem $REF -M -t 8 -R '@RG\tID:$i\tCN:$SEQCTR\tLB:$LIB\tSM:$i\tPL:ILLUMINA' $i_1P.fq.gz $i_2P.fq.gz | samtools view -bh - | samtools sort -> $i\.$genomes\.sorted.bam
+bwa mem $REF -M -t 8 -R '@RG\tID:$i\tCN:$SEQCTR\tLB:$LIB\tSM:$i\tPL:ILLUMINA' $i_1P.fq.gz $i_2P.fq.gz | samtools view -bhq 1 - | samtools sort -> $i\.$genomes\.sorted.bam
 
 echo "mapping stats $i sorted"
 samtools flagstat $i\.$genomes\.sorted.bam
