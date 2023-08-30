@@ -3,7 +3,7 @@
 
  Scripts used to assess <i>Onchocerca volvulus</i> sequence data for sub-optimal response to ivermectin.
 
-Manuscript: Hedtke SM, Armoo S, Doyle SR, Abong R, Amombo GN, Mitreva M, Osei-Atweneboana MY, Wanji S, Kuesel AC, Grant WN. Genome-based tools for onchocerciasis elimination: <i>Onchocerca volvulus</i> genetic markers for response to ivermectin and geographic origin.
+Please cite: Hedtke SM, Armoo S, Doyle SR, Abong R, Amombo GN, Mitreva M, Osei-Atweneboana MY, Wanji S, Kuesel AC, Grant WN. Genome-based tools for onchocerciasis elimination: <i>Onchocerca volvulus</i> genetic markers for response to ivermectin and geographic origin.
  
  Note that commands are dependent on the program version.
  
