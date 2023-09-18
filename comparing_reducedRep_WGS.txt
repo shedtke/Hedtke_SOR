@@ -1,0 +1,84 @@
+#!/bin/bash
+#SBATCH --cpus-per-task 1
+#SBATCH --mem-per-cpu=32768
+#SBATCH --partition=week
+#SBATCH --time=120:00:00
+
+module load GATK
+module load SAMtools
+
+ID="01_24_N1_F1_D80
+01_28_N1_F2_D80
+01_35_N1_F1_D80
+01_35_N1_F2_D80
+01_51_N1_F1_D0"
+02_08_N1_F1_D80
+02_08_N3_F2_D80
+02_08_N3_F3_D80
+03_09_N2_F1_D80
+03_09_N2_F2_D80
+04_15_N1_F3_D80
+04_89_N1_F1_D80
+05_04_N1_F1_D80
+05_04_N2_F1_D80
+05_07_N1_F1_D80
+05_08_N1_F1_D80
+05_08_N1_F3_D80
+05_08_N3_F1_D80
+05_18_N1_F1_D80
+05_39_N1_F1_D80
+05_89_N1_F1_D80
+06_07_N3_F1_D80
+06_12_N2_F1_D80
+06_27_N1_F1_D80
+06_27_N1_F2_D80
+06_27_N1_F3_D80
+06_57_N1_F3_D80
+07_39_N1_F1_D80
+09_06_N1_F1_D80
+09_11_N1_F1_D80
+09_24_N1_F1_D80
+10_06_N1_F1_D80
+10_52_N1_F2_D80
+12_24_N1_F3_D80"
+
+## reference path
+REF=/data/group/grantlab/scratch/Ov_nOv4_mtOv_wOv.fa
+DIR=/data/group/grantlab/scratch/shedtke/WGAvsRR
+## this should be the same genome & fileBaseName used in HaplotypeCaller
+fileBaseName="Cam.rr.test"
+ploidy=2
+chrom=nOv4
+prefix=nOv4.mtOv.wOv
+
+for i in $ID
+do
+
+echo "$i"
+
+samtools index $i.$prefix.unique.bam
+samtools index $i.rr.$prefix.unique.bam
+samtools index $i.WGA.$prefix.unique.bam
+gatk HaplotypeCaller -R $REF -I $i.$prefix.unique.bam -O $i.$chrom.gatk.vcf.gz -ERC GVCF -ploidy $ploidy -L OVOC.OM1a_TELO_TELO -L OVOC.OM2_TELO_TELO -L OVOC.OM3_TELO_TELO -L OVOC.OM4_TELOL_LFR
+gatk HaplotypeCaller -R $REF -I $i.rr.$prefix.unique.bam -O $i.rr.$chrom.gatk.vcf.gz -ERC GVCF -ploidy $ploidy -L OVOC.OM1a_TELO_TELO -L OVOC.OM2_TELO_TELO -L OVOC.OM3_TELO_TELO -L OVOC.OM4_TELOL_LFR
+gatk HaplotypeCaller -R $REF -I $i.WGA.$prefix.unique.bam -O $i.WGA.$chrom.gatk.vcf.gz -ERC GVCF -ploidy $ploidy -L OVOC.OM1a_TELO_TELO -L OVOC.OM2_TELO_TELO -L OVOC.OM3_TELO_TELO -L OVOC.OM4_TELOL_LFR
+
+done
+
+ls *rr*gatk.vcf.gz > gatk.rr.list
+ls *WGA*gatk.vcf.gz > gatk.WGA.list
+ls *0.gatk.vcf.gz > gatk.WGS.list
+
+gatk CombineGVCFs -O $fileBaseName.$chrom.rr.HC.vcf.gz -R $REF --variant gatk.rr.list
+gatk CombineGVCFs -O $fileBaseName.$chrom.WGA.HC.vcf.gz -R $REF --variant gatk.WGA.list
+gatk CombineGVCFs -O $fileBaseName.$chrom.WGS.HC.vcf.gz -R $REF --variant gatk.WGS.list
+
+
+## this is the command to call genotypes and you shouldn't have to change anything here
+gatk IndexFeatureFile -I $fileBaseName.$chrom.HC.vcf.gz -O $fileBaseName.$chrom.HC.vcf.tbi
+gatk GenotypeGVCFs -R $REF -V $fileBaseName.$chrom.HC.vcf.gz -O $fileBaseName.$chrom.GG.vcf.gz -ploidy $ploidy
+ 
+## convert target bed file, with 500bp to either side, based on OV3 to OV4
+
+cat target_500bp.bed | perl convert.bed.pl > targets_500bp.OM4.bed
+
